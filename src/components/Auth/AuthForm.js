@@ -1,8 +1,10 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
+import AuthContext from "../../store/auth-context";
 
 import classes from "./AuthForm.module.css";
 
 const AuthForm = () => {
+  const authContext = useContext(AuthContext);
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const emailRef = useRef();
@@ -49,7 +51,9 @@ const AuthForm = () => {
         }
       })
       .then((data) => {
-        console.log(data);
+        authContext.login(data.idToken);
+        console.log(authContext.isLoggedIn);
+        console.log(authContext.token);
       })
       .catch((e) => {
         alert(e.message);
