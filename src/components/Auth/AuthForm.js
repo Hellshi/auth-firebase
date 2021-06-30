@@ -17,36 +17,43 @@ const AuthForm = () => {
     e.preventDefault();
     const enteredEmail = emailRef.current.value;
     const enteredPassword = passwordRef.current.value;
-
+    let url;
     if (isLogin) {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCbotafDkGpdn1CEEzqQw-ypNvl8hN8XRM";
     } else {
-      fetch(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCbotafDkGpdn1CEEzqQw-ypNvl8hN8XRM",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            email: enteredEmail,
-            password: enteredPassword,
-            returnSecureToken: true,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      ).then((res) => {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCbotafDkGpdn1CEEzqQw-ypNvl8hN8XRM";
+    }
+
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        email: enteredEmail,
+        password: enteredPassword,
+        returnSecureToken: true,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
         setIsLoading(false);
         if (res.ok) {
+          return res.json();
         } else {
           res.json().then((data) => {
-            let errorMessage = "Create an account failed!";
-            if (data && data.error && data.error.message) {
-              errorMessage = data.error.message;
-              alert(errorMessage);
-            }
+            let errorMessage = data.error.message;
+            throw new Error(errorMessage);
           });
         }
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((e) => {
+        alert(e.message);
       });
-    }
   };
 
   return (
