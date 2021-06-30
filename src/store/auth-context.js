@@ -34,7 +34,7 @@ const retrieveStoredToken = () => {
 export const AuthContextProvider = (props) => {
   const tokenData = retrieveStoredToken();
   let initialToken;
-  if (initialToken) {
+  if (tokenData) {
     initialToken = tokenData.token;
   }
   const [token, setToken] = useState(initialToken);
@@ -55,7 +55,6 @@ export const AuthContextProvider = (props) => {
     localStorage.setItem("expirationTime", expirationTime);
 
     const remainingTime = calculateRemainingTime(expirationTime);
-    console.log(remainingTime);
 
     logOutTimer = setTimeout(logOutHandler, remainingTime);
   };
