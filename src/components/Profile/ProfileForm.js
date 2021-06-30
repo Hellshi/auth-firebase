@@ -5,10 +5,12 @@ import classes from "./ProfileForm.module.css";
 const ProfileForm = () => {
   const passwordRef = useRef();
   const authContext = useContext(AuthContext);
+  console.log(authContext.token);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const passwordValue = passwordRef;
+    const passwordValue = passwordRef.current.value;
+    console.log(passwordValue);
 
     fetch(
       "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCbotafDkGpdn1CEEzqQw-ypNvl8hN8XRM",
